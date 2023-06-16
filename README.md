@@ -30,3 +30,49 @@
 * [@w5/i18n](https://www.npmjs.com/package/@w5/i18n)
 
   用于翻译 `yaml` 生成网站的语言文件。
+
+### 文档翻译自动化说明
+
+请参见仓库 [xxai-art/doc](https://github.com/xxai-art/doc)
+
+建议先安装 nodejs, [direnv](https://direnv.net) 、 [bun](https://github.com/oven-sh/bun)，然后进入目录后 `direnv allow`。
+
+为了避免翻译成几百种语言的仓库过大，我把每种语言单独创建了一个代码仓库，并创立一个组织来存放这个仓库
+
+设置环境变量 `GITHUB_ACCESS_TOKEN` 然后运行 [create.github.coffee](https://github.com/xxai-art/doc/blob/main/create.github.coffee) 会自动创建仓库。
+
+当然你也可以放到一个仓库中。
+
+翻译脚本参考 [run.sh](https://github.com/xxai-art/doc/blob/main/run.sh)
+
+脚本代码解读如下：
+
+[bunx](https://bun.sh/docs/cli/bunx) 是 npx 的替代品，更快，当然如果你没有安装 bun，用 `npx` 替代也可以。
+
+`bunx mdt zh` 把 zh 目录下的 `.mdt` 渲染为 `.md`，参见下面 2 个链接的文件
+
+* [coffee_plus.mdt](https://github.com/xxai-doc/zh/blob/main/coffee_plus.mdt)
+* [coffee_plus.md](https://github.com/xxai-doc/zh/blob/main/coffee_plus.md)
+
+`bunx i18n` 是翻译的核心代码（如果你只安装了 `nodejs`，没有安装 `bun` 和 `direnv`，也可以运行 `npx i18n` 来翻译）。
+
+它会解析 [i18n.yml](https://github.com/xxai-art/doc/blob/main/i18n.yml) ，本文档的 `i18n.yml` 配置如下：
+
+```
+en:
+zh: ja ko en
+```
+
+含义是 :
+
+中文翻译为日文、韩文、英文，英文翻译为其他所有语种。如果你只想支持中文、英文，可以只写 `zh: en`。
+
+最后是 [gen.README.coffee](https://github.com/xxai-art/doc/blob/main/gen.README.coffee)，它是提取每个语种 `README.md` 大标题 和 第一个子标题 之间的内容，来生成一个入口的 `README.md` 。代码很简单，可以自己看一下。
+
+用到了谷歌 API 来免费翻译。如不能访问谷歌，请配置并设置代理，比如 :
+
+```
+export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+```
+
+翻译脚本将在 `.i18n` 目录下生成翻译的缓存，请用 `git status` 查看并将其添加到代码仓库，避免重复翻译。
