@@ -61,9 +61,7 @@ en:
 zh: ja ko en
 ```
 
-含义是 :
-
-中文翻译为日文、韩文、英文，英文翻译为其他所有语种。如果你只想支持中文、英文，可以只写 `zh: en`。
+含义是 : 中文翻译为日文、韩文、英文，英文翻译为其他所有语种。如果你只想支持中文、英文，可以只写 `zh: en`。
 
 最后是 [gen.README.coffee](https://github.com/xxai-art/doc/blob/main/gen.README.coffee)，它是提取每个语种 `README.md` 大标题 和 第一个子标题 之间的内容，来生成一个入口的 `README.md` 。代码很简单，可以自己看一下。
 
