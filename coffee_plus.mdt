@@ -1,0 +1,35 @@
+# coffee_plus
+
+[@w5/coffee_plus](http://npmjs.com/@w5/coffee_plus) ，在 coffeescript 语法的基础上增加了一些特性，参见 [coffee_plus](./coffee_plus.md)。
+
+## 声明变量
+
+```
++ var1, var2
+```
+
+## 声明标签
+
+`:$` 是为了配合 [svelte](https://svelte.dev/docs#component-format-script-3-$-marks-a-statement-as-reactive) 使用。
+
+```
+<+ ./coffee_plus/label.coffee>
+```
+
+会编译为
+
+```
+<+ ./coffee_plus/label.js>
+```
+
+## 快捷导入
+
+```
+<+ ./coffee_plus/import.coffee>
+```
+
+会编译为
+
+```
+<+ ./coffee_plus/import.js>
+```
