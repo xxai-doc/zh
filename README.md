@@ -33,15 +33,15 @@
 
 ### 文档翻译自动化说明
 
-请参见仓库 [xxai-art/doc](https://github.com/xxai-art/doc)
+请参见代码库 [xxai-art/doc](https://github.com/xxai-art/doc)
 
-建议先安装 nodejs, [direnv](https://direnv.net) 、 [bun](https://github.com/oven-sh/bun)，然后进入目录后 `direnv allow`。
+建议先安装 nodejs, [direnv](https://direnv.net), [bun](https://github.com/oven-sh/bun)，然后进入目录后 `direnv allow` ( 进入目录后会自动执行 [.envrc](https://github.com/xxai-art/doc/blob/main/.envrc) )。
 
-为了避免翻译成几百种语言的仓库过大，我把每种语言单独创建了一个代码仓库，并创立一个组织来存放这个仓库
+为了避免翻译成几百种语言的代码库过大，我把每种语言单独创建了一个代码代码库，并创立一个组织来存放这个代码库
 
-设置环境变量 `GITHUB_ACCESS_TOKEN` 然后运行 [create.github.coffee](https://github.com/xxai-art/doc/blob/main/create.github.coffee) 会自动创建仓库。
+设置环境变量 `GITHUB_ACCESS_TOKEN` 然后运行 [create.github.coffee](https://github.com/xxai-art/doc/blob/main/create.github.coffee) 会自动创建代码库。
 
-当然你也可以放到一个仓库中。
+当然你也可以放到一个代码库中。
 
 翻译脚本参考 [run.sh](https://github.com/xxai-art/doc/blob/main/run.sh)
 
@@ -73,4 +73,8 @@ zh: ja ko en
 export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 ```
 
-翻译脚本将在 `.i18n` 目录下生成翻译的缓存，请用 `git status` 查看并将其添加到代码仓库，避免重复翻译。
+翻译脚本将在 `.i18n` 目录下生成翻译的缓存，请用 `git status` 查看并将其添加到代码代码库，避免重复翻译。
+
+每次修改译文之后请运行 `bunx i18n`，更新缓存。
+
+如果同时修改了原文和译文，会造成缓存错乱，所以如果要修改，只能修改一个，然后运行 `bunx i18n` 更新缓存。
