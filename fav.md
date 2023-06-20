@@ -21,7 +21,7 @@ CREATE TABLE fav (
 );
 ```
 
-形成这个用户收藏行为的全量操作日志，类似数据库的 [WAL](https://www.taosdata.com/engineering/6062.html)。
+表中会记录用户收藏、取消收藏行为的全量操作日志，类似数据库的 [WAL](https://www.taosdata.com/engineering/6062.html)。
 
 然后前端用 [indexdb](https://www.ruanyifeng.com/blog/2018/07/indexeddb.html) 同步当前这个用户的全量收藏日志，类似 [firebase](https://firebase.google.com/products/realtime-database?hl=zh-cn)、[rxdb](https://rxdb.info)。
 
