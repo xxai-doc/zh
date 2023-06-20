@@ -12,7 +12,7 @@ CREATE TABLE fav (
   id uint64 NOT NULL,  // 用户行为的时间戳(毫秒)
   uid uint64 NOT NULL,  // 用户 id
   cid uint8 NOT NULL, // 用户行为 : 收藏、取消收藏
-  rid uint64 NOT NULL, // 收藏对象的 id
+  rid uint64 NOT NULL, // 收藏对象的 id，收藏的id压缩小段编码后，加一个字节前缀标识类型
   TIMESTAMP KEY(ts),
   PRIMARY KEY(id)
 ) ENGINE=Analytic WITH (
