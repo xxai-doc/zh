@@ -11,8 +11,10 @@ CREATE TABLE fav (
   ts TIMESTAMP NOT NULL, // 插入的时间戳
   id uint64 NOT NULL,  // 用户行为的时间戳(毫秒)
   uid uint64 NOT NULL,  // 用户 id
-  cid uint8 NOT NULL, // 用户行为 : 收藏、取消收藏
+  action uint8 NOT NULL, // 用户行为 : 收藏、取消收藏
+  kind uint8 NOT NULL, // 对象类型，比如图片，模型，视频
   rid uint64 NOT NULL, // 收藏对象的 id
+  
   TIMESTAMP KEY(ts),
   PRIMARY KEY(id)
 ) ENGINE=Analytic WITH (
