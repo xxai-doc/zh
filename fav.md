@@ -7,20 +7,20 @@
 表结构设计：
 
 ```
+// 插入时间/用户操作时间/用户id/操作/对象类型/对象id
 CREATE TABLE fav (
-  ts TIMESTAMP NOT NULL, // 插入的时间戳
-  id uint64 NOT NULL,  // 用户行为的时间戳(毫秒)
-  uid uint64 NOT NULL,  // 用户 id
-  action uint8 NOT NULL, // 用户行为 : 收藏、取消收藏
-  kind uint8 NOT NULL, // 对象类型，比如图片，模型，视频
-  rid uint64 NOT NULL, // 收藏对象的 id
-  
+  ts TIMESTAMP NOT NULL,
+  ctime uint64 NOT NULL,
+  uid uint64 NOT NULL,
+  action uint8 NOT NULL,
+  cid uint8 NOT NULL,
+  rid uint64 NOT NULL,
   TIMESTAMP KEY(ts),
-  PRIMARY KEY(id)
+  PRIMARY KEY(uid, ts)
 ) ENGINE=Analytic WITH (
   compression='ZSTD',
-  enable_ttl=false
-);
+  enable_ttl='false'
+)
 ```
 
 表中会记录用户收藏、取消收藏行为的全量操作日志，类似数据库的 [WAL](https://www.taosdata.com/engineering/6062.html)。
@@ -30,8 +30,6 @@ CREATE TABLE fav (
 然后，在前端基于此数据库判断图片是否已经收藏、展示收藏列表等等。
 
 ## 客户端数据的同步
-
-当标签页被选举为领导者的时候（什么是选举见下面），会创建一个 SSE 并同步数据。
 
 同步数据的逻辑是，会记录下上次同步到的最后一条的 client.ts，再次访问，会把 ts 之后本地新增的记录都传给服务器。
 
@@ -63,15 +61,11 @@ cloudflare 代理的 SSE 可能会因长时间没通讯超时，所以客户端�
 
 客户端每 90 秒会断开重连一次， 所以超过 100 没更新时间戳的客户端就自动从 zset 中删除掉。
 
-## 浏览器多标签页选举
+## EventSource in service worker
 
 为了避免每个标签页都搞一个 SSE 长连接浪费服务器资源。
 
-多标签页会进行选举 [tab-election](https://github.com/dabblewriter/tab-election)。
-
-选举成为领导者，才会创建 SSE 链接。
-
-领导者收到了 SSE 的消息，会更加消息类型进行在对应的 [Broadcast Channel](https://developer.mozilla.org/zh-CN/docs/Web/API/Broadcast_Channel_API) 上分发。
+只在 service worker 中维持一个 eventsource
 
 消息类型分为：全局消息 (不同类型的全局消息都自己的频道，比如：收藏)、标签页消息（可以用于搜索框的自动补全，每个标签页有自己的专属频道）。
 
